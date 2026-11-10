@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Калькулятор погрешности по метизам — Академия УМ</title>
-  <meta name="description" content="Пропорции для акта: 5 из 100 по весу, 12 из 100 по штукам, сумма строки до 30 рублей." />
+  <meta name="description" content="Две отдельные пропорции для акта: 5 из 100 по весу и 12 из 100 по штукам. Сумма строки только для справки." />
   <meta name="theme-color" content="#4208A8" />
   <meta name="robots" content="noindex,nofollow" />
   <link rel="icon" href="logo.png" />
@@ -87,8 +87,21 @@
     .lead { margin: 0 0 14px; max-width: 72ch; }
     .props {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: 1fr 1fr;
       gap: 12px;
+    }
+    .calcs { display: grid; gap: 16px; }
+    .calc-name {
+      margin: 0 0 6px;
+      font-family: var(--head);
+      font-size: 1.35rem;
+      color: var(--violet);
+      letter-spacing: -0.03em;
+    }
+    .hint { margin: 0 0 12px; color: var(--muted); font-size: 0.95rem; }
+    .sumline {
+      margin: 10px 0 0;
+      font-size: 0.92rem;
     }
     .prop, .card, .calc, .story {
       background: var(--white);
@@ -283,84 +296,105 @@
     <section class="hero">
       <p class="kicker">Акт о расхождении</p>
       <h1>Делаем мир крепче</h1>
-      <p>Мелкую недостачу по метизам магазин закрывает сам, когда пропорция маленькая и сумма строки до 30&nbsp;рублей. Треть мешка сюда не входит, даже если по деньгам вышло немного.</p>
+      <p>Вес и штуки считаем разными пропорциями. Это не одно списание. Сумму из колонки «Сумма» можно вписать рядом: калькулятор её показывает и на пропорцию не смотрит.</p>
     </section>
 
-    <h2>Пропорции</h2>
-    <p class="lead">Смотрим одну строку акта. Закрываем её сами, только если сошлись все три пропорции. Хватит одного «нет», и это уже недостача.</p>
+    <h2>Две пропорции</h2>
+    <p class="lead">Килограммы сверяем только с весом. Штуки сверяем только со штуками. Строка в килограммах во второй расчёт не попадает, и наоборот. Надпись «шт/кг» в названии единицу не меняет: смотрите, как количество стоит в акте.</p>
     <div class="props">
       <article class="prop">
-        <p class="tag">Килограммы</p>
+        <p class="tag">Только килограммы</p>
         <p class="ratio" aria-label="5 из 100"><span>5</span><i></i><span>100</span></p>
         <h3>50 г на 1 кг</h3>
-        <p>На каждые 1&nbsp;000&nbsp;г можно не добрать 50&nbsp;г. На 0,5&nbsp;кг это 25&nbsp;г. На 2&nbsp;кг это 100&nbsp;г.</p>
+        <p>На каждые 1&nbsp;000&nbsp;г можно не добрать 50&nbsp;г. На 0,5&nbsp;кг это 25&nbsp;г. На 2&nbsp;кг это 100&nbsp;г. Выписали 1&nbsp;кг, приехало 0,976: 24&nbsp;г из 1&nbsp;000. Приехало 0,700: 300&nbsp;г из 1&nbsp;000, это уже не весы.</p>
       </article>
       <article class="prop">
-        <p class="tag">Штуки</p>
+        <p class="tag">Только штуки</p>
         <p class="ratio" aria-label="12 из 100"><span>12</span><i></i><span>100</span></p>
         <h3>12 штук на 100</h3>
-        <p>На 300 штук можно не добрать 36. На 28 штук можно не добрать 3. Тридцать седьмая из трёхсот и четвёртая из двадцати восьми уже больше пропорции.</p>
-      </article>
-      <article class="prop">
-        <p class="tag">Деньги</p>
-        <p class="ratio" aria-label="до 30 рублей"><span>≤</span><span>30&nbsp;₽</span></p>
-        <h3>Сумма одной строки</h3>
-        <p>Берём число из колонки «Сумма», без минуса. 30&nbsp;рублей включительно ещё можно. Строки между собой не складываем.</p>
+        <p>На 300 штук можно не добрать 36. На 28 штук можно не добрать 3. Приехало 265 из 300: не хватает 35. Приехало 150–180: не хватает почти половина пачки.</p>
       </article>
     </div>
 
-    <h2>Посчитайте строку</h2>
-    <p class="lead">Единицу берёте из акта. 1 и 0,99 — это килограммы. 312 и 28 — это штуки. Надпись «шт/кг» в названии на пропорцию не переключает.</p>
-    <form class="calc" id="calc">
-      <div class="form">
-        <label>В чём строка</label>
-        <div class="seg" role="group" aria-label="Единица">
-          <button type="button" id="btn-kg" class="on">Килограммы</button>
-          <button type="button" id="btn-pcs">Штуки</button>
-        </div>
-        <div class="row2">
-          <label>По документу
-            <input id="doc" type="text" inputmode="decimal" placeholder="1 или 300" autocomplete="off" />
+    <h2>Два расчёта</h2>
+    <p class="lead">Сумма строки необязательна. Если вписать, она останется под ответом для справки.</p>
+    <div class="calcs">
+      <form class="calc" data-kind="kg">
+        <div class="form">
+          <h3 class="calc-name">Вес</h3>
+          <p class="hint">Количество в акте килограммами: 1 и 0,99, 0,5 и 0,43.</p>
+          <div class="row2">
+            <label>По документу, кг
+              <input data-field="doc" type="text" inputmode="decimal" placeholder="1" autocomplete="off" />
+            </label>
+            <label>Факт, кг
+              <input data-field="fact" type="text" inputmode="decimal" placeholder="0,976" autocomplete="off" />
+            </label>
+          </div>
+          <label>Сумма строки, для справки
+            <input data-field="sum" type="text" inputmode="decimal" placeholder="можно не заполнять" autocomplete="off" />
           </label>
-          <label>Факт
-            <input id="fact" type="text" inputmode="decimal" placeholder="0,976 или 265" autocomplete="off" />
+          <div class="chips" aria-label="Примеры веса">
+            <button type="button" data-fill="1|0,976|4,20">1 кг → 0,976</button>
+            <button type="button" data-fill="1|0,700|18">1 кг → 0,700</button>
+            <button type="button" data-fill="0,5|0,43|8,42">0,5 кг → 0,43</button>
+          </div>
+        </div>
+        <div class="result" aria-live="polite">
+          <span class="big">Ждёт килограммы</span>
+          <p>Впишите вес по документу и по факту. Допуск здесь 5 из 100.</p>
+        </div>
+      </form>
+
+      <form class="calc" data-kind="pcs">
+        <div class="form">
+          <h3 class="calc-name">Штуки</h3>
+          <p class="hint">Количество в акте штуками: 312 и 307, 28 и 21.</p>
+          <div class="row2">
+            <label>По документу, шт
+              <input data-field="doc" type="text" inputmode="decimal" placeholder="300" autocomplete="off" />
+            </label>
+            <label>Факт, шт
+              <input data-field="fact" type="text" inputmode="decimal" placeholder="265" autocomplete="off" />
+            </label>
+          </div>
+          <label>Сумма строки, для справки
+            <input data-field="sum" type="text" inputmode="decimal" placeholder="можно не заполнять" autocomplete="off" />
           </label>
+          <div class="chips" aria-label="Примеры штук">
+            <button type="button" data-fill="300|265|12">300 → 265</button>
+            <button type="button" data-fill="300|165|20">300 → 165</button>
+            <button type="button" data-fill="28|21|29,12">28 → 21</button>
+          </div>
         </div>
-        <label>Сумма строки, ₽
-          <input id="sum" type="text" inputmode="decimal" placeholder="до 30" autocomplete="off" />
-        </label>
-        <label class="checkline">
-          <input id="metiz" type="checkbox" checked />
-          <span>Это метизка: гвозди, саморезы, болты, гайки, шайбы, гроверы, анкеры, шпильки, дюбели.</span>
-        </label>
-        <div class="chips" aria-label="Примеры">
-          <button type="button" data-demo="ok">1 кг → 0,976</button>
-          <button type="button" data-demo="bad">1 кг → 0,700</button>
-          <button type="button" data-demo="pcs">300 шт → 265</button>
-          <button type="button" data-demo="pcsbad">300 шт → 165</button>
-          <button type="button" data-demo="m12">Болт 0,5 → 0,43</button>
-          <button type="button" data-demo="anchor">Анкер 28 → 21</button>
+        <div class="result" aria-live="polite">
+          <span class="big">Ждёт штуки</span>
+          <p>Впишите штуки по документу и по факту. Допуск здесь 12 из 100.</p>
         </div>
-      </div>
-      <div class="result" id="result" aria-live="polite">
-        <span class="big">Ждёт строку из акта</span>
-        <p>Слева будет ваша пропорция, справа допуск. Полоска покажет, доехала ли граница.</p>
-      </div>
-    </form>
+      </form>
+    </div>
 
     <h2>Как эти пропорции выглядят на примерах</h2>
     <div class="stories">
       <article class="story yes">
-        <p class="tag">Пропорция сходится</p>
+        <p class="tag">Вес в допуске</p>
         <h3>1 кг и приехало 0,976 кг</h3>
-        <p>Не хватает 24&nbsp;г из 1&nbsp;000&nbsp;г. Это 24/1000. Допуск 50/1000. 24 меньше 50, строку закрываем, если сумма до 30&nbsp;₽.</p>
-        <p>300 штук и приехало 265. Не хватает 35 из 300. Допуск 36 из 300. 35 меньше 36, тоже закрываем при сумме до 30&nbsp;₽.</p>
+        <p>Не хватает 24&nbsp;г из 1&nbsp;000&nbsp;г. Допуск 50 из 1&nbsp;000. Это пропорция веса, сумма строки здесь ни при чём.</p>
       </article>
       <article class="story">
-        <p class="tag">Пропорция уже больше</p>
+        <p class="tag">Вес больше допуска</p>
         <h3>1 кг и приехало 0,700 кг</h3>
-        <p>Не хватает 300&nbsp;г из 1&nbsp;000&nbsp;г. Это 300/1000. Допуск всё те же 50/1000. На магазин как весы не списываем, даже если сумма 15 или 25&nbsp;рублей.</p>
-        <p>300 штук и приехало 150–180. Не хватает 120–150 из 300. Допуск 36 из 300. Это уже не пересчёт пачки.</p>
+        <p>Не хватает 300&nbsp;г из 1&nbsp;000&nbsp;г. Допуск те же 50 из 1&nbsp;000. Штучный расчёт к этим килограммам не применяется.</p>
+      </article>
+      <article class="story yes">
+        <p class="tag">Штуки в допуске</p>
+        <h3>300 штук и приехало 265</h3>
+        <p>Не хватает 35 из 300. Допуск 36 из 300. Это отдельная пропорция, не продолжение веса.</p>
+      </article>
+      <article class="story">
+        <p class="tag">Штуки больше допуска</p>
+        <h3>300 штук и приехало 150–180</h3>
+        <p>Не хватает 120–150 из 300. Допуск те же 36 из 300. Это уже не пересчёт пачки.</p>
       </article>
     </div>
 
@@ -382,32 +416,14 @@
         <tr><td>28 шт</td><td class="num">3 из 28</td><td>от 25 шт</td></tr>
       </tbody>
     </table>
-    <p class="note">Ровно 5 из 100, ровно 12 из 100 и ровно 30&nbsp;₽ магазин ещё закрывает сам. Чуть больше оставляем как недостачу. Клей, герметик, щётки и инструмент этими пропорциями не закрываем: целая штука, которой нет, это обычная недостача.</p>
+    <p class="note">Ровно 5 из 100 по весу и ровно 12 из 100 по штукам ещё входят в свою пропорцию. Сумма строки в эту таблицу не входит: её смотрят отдельно, калькулятор её не решает.</p>
 
     <h2>Что написать в комментарии</h2>
-    <p class="lead">Факт в ордере оставляем как пересчитали. В комментарий к строке калькулятор подставляет готовую фразу: пропорция, сумма и решение.</p>
+    <p class="lead">Факт в ордере оставляем как пересчитали. Калькулятор даёт фразу только про свою пропорцию. Если сумму вписали, она добавляется второй строкой, для справки.</p>
     <footer>У Михалыча · Делаем мир крепче · приёмка метизов с РЦ · с 30 октября 2026</footer>
   </div>
   <script>
     (function () {
-      var unit = "kg";
-      var doc = document.getElementById("doc");
-      var fact = document.getElementById("fact");
-      var sum = document.getElementById("sum");
-      var metiz = document.getElementById("metiz");
-      var result = document.getElementById("result");
-      var btnKg = document.getElementById("btn-kg");
-      var btnPcs = document.getElementById("btn-pcs");
-
-      var demos = {
-        ok: ["kg", "1", "0,976", "4,20", true],
-        bad: ["kg", "1", "0,700", "18", true],
-        pcs: ["pcs", "300", "265", "12", true],
-        pcsbad: ["pcs", "300", "165", "20", true],
-        m12: ["kg", "0,5", "0,43", "8,42", true],
-        anchor: ["pcs", "28", "21", "29,12", true]
-      };
-
       function parseNum(value) {
         var clean = String(value || "").replace(/\s/g, "").replace(",", ".");
         if (clean === "" || clean === "-" || clean === "+") return null;
@@ -445,26 +461,6 @@
         return Math.floor(exact + 1e-9);
       }
 
-      function setUnit(next) {
-        unit = next;
-        btnKg.classList.toggle("on", unit === "kg");
-        btnPcs.classList.toggle("on", unit === "pcs");
-        recount();
-      }
-
-      function applyDemo(key) {
-        var row = demos[key];
-        if (!row) return;
-        unit = row[0];
-        btnKg.classList.toggle("on", unit === "kg");
-        btnPcs.classList.toggle("on", unit === "pcs");
-        doc.value = row[1];
-        fact.value = row[2];
-        sum.value = row[3];
-        metiz.checked = row[4];
-        recount();
-      }
-
       function barHtml(factN, docN, limitPct, over) {
         var factW = Math.max(0, Math.min(100, (factN / docN) * 100));
         var limitLeft = 100 - limitPct;
@@ -479,107 +475,138 @@
         );
       }
 
-      function recount() {
-        var docN = parseNum(doc.value);
-        var factN = parseNum(fact.value);
-        var sumN = parseNum(sum.value);
-        if (docN === null || factN === null || sumN === null) {
-          result.className = "result";
-          result.innerHTML = '<span class="big">Ждёт строку из акта</span><p>Впишите количество по документу, факт и сумму. Слева будет ваша пропорция, справа допуск.</p>';
-          return;
-        }
-        sumN = Math.round(Math.abs(sumN) * 100) / 100;
-        if (!(docN > 0) || factN < 0) {
-          result.className = "result stop";
-          result.innerHTML = '<span class="big">Проверьте числа</span><p>По документу нужно число больше нуля. Факт не бывает меньше нуля.</p>';
-          return;
-        }
-        if (!metiz.checked) {
-          result.className = "result stop";
-          result.innerHTML = '<span class="big">Это не метизка</span><p>Пропорции 5/100, 12/100 и 30&nbsp;₽ к этой строке не применяем. Нет целой банки, щётки или тубы. Это обычная недостача.</p>';
-          return;
-        }
-        if (factN > docN + 1e-9) {
-          result.className = "result stop";
-          result.innerHTML = '<span class="big">Это излишек</span><p>По факту больше на ' + fmtQty(factN - docN) + (unit === "kg" ? " кг" : " шт") + '. Лишнее как погрешность не списываем. В акте оставляем факт.</p>';
-          return;
-        }
-        var short = docN - factN;
-        if (short <= 1e-9) {
-          result.className = "result";
-          result.innerHTML = '<span class="big">Списывать нечего</span><p>Количество сошлось. Если в акте по строке есть сумма, проверьте, ту ли строку смотрите.</p>';
-          return;
-        }
+      function mount(form) {
+        var kind = form.getAttribute("data-kind");
+        var limit = kind === "kg" ? 5 : 12;
+        var doc = form.querySelector("[data-field=doc]");
+        var fact = form.querySelector("[data-field=fact]");
+        var sum = form.querySelector("[data-field=sum]");
+        var result = form.querySelector(".result");
+        var idle = kind === "kg"
+          ? '<span class="big">Ждёт килограммы</span><p>Впишите вес по документу и по факту. Допуск здесь 5 из 100.</p>'
+          : '<span class="big">Ждёт штуки</span><p>Впишите штуки по документу и по факту. Допуск здесь 12 из 100.</p>';
 
-        var limit = unit === "kg" ? 5 : 12;
-        var moneyOk = sumN <= 30;
-        var qtyOk = within(short, docN, limit);
-        var pct = pctText(short, docN);
-        var yours, allow, barNote;
-
-        if (unit === "kg") {
-          var shortG = Math.round(short * 1000 * 10) / 10;
-          var docG = Math.round(docN * 1000 * 10) / 10;
-          var allowG = Math.round(docN * 50 * 10) / 10;
-          yours = fmtQty(shortG) + " г из " + fmtQty(docG) + " г";
-          allow = fmtQty(allowG) + " г из " + fmtQty(docG) + " г";
-          barNote = "Факт " + fmtQty(factN) + " кг. Граница, ниже которой уже недостача: " + fmtQty(docN * 0.95) + " кг.";
-        } else {
-          var allowPcs = maxPieces(docN);
-          yours = fmtQty(short) + " из " + fmtQty(docN);
-          allow = fmtQty(allowPcs) + " из " + fmtQty(docN);
-          barNote = "Факт " + fmtQty(factN) + " шт. Граница: от " + fmtQty(docN - allowPcs) + " шт.";
-        }
-
-        var moneyLine = moneyOk
-          ? "Сумма " + fmt(sumN, 2) + " ₽ входит в 30 ₽."
-          : "Сумма " + fmt(sumN, 2) + " ₽ больше 30 ₽.";
-        var qtyLine = qtyOk
-          ? "Недобор " + yours + ", это " + pct + "%. Допуск " + allow + "."
-          : "Недобор " + yours + ", это " + pct + "%. Допуск " + allow + ". Пропорция больше.";
-
-        var comment = qtyOk && moneyOk
-          ? "Погрешность приёмки. Недобор " + pct + "%, сумма " + fmt(sumN, 2) + " ₽. Допуск: до " + limit + "% и до 30 ₽. Магазин закрывает строку сам."
-          : "Недостача, не погрешность. Недобор " + pct + "% при сумме " + fmt(sumN, 2) + " ₽.";
-
-        var html =
-          '<span class="big">' + (qtyOk && moneyOk ? "Магазин закрывает сам" : "Оставляем как недостачу") + "</span>" +
-          '<div class="fracs">' +
-            '<div class="frac"><span>Ваша пропорция</span><b>' + yours + "</b><span>" + pct + "%</span></div>" +
-            '<div class="frac"><span>Допуск</span><b>' + allow + "</b><span>" + limit + " из 100</span></div>" +
-          "</div>" +
-          barHtml(factN, docN, limit, !qtyOk) +
-          '<p class="bar-note">' + barNote + "</p>" +
-          '<ul class="checks"><li>' + qtyLine + "</li><li>" + moneyLine + "</li></ul>" +
-          '<p class="comment">' + comment + "</p>" +
-          '<button type="button" class="copy">Скопировать комментарий</button>';
-
-        result.className = "result " + (qtyOk && moneyOk ? "go" : "stop");
-        result.innerHTML = html;
-        result.querySelector(".copy").addEventListener("click", function () {
-          var btn = this;
-          var done = function () { btn.textContent = "Скопировано"; };
-          if (navigator.clipboard && navigator.clipboard.writeText) {
-            navigator.clipboard.writeText(comment).then(done).catch(function () { done(); });
-          } else {
-            done();
+        function sumNote(sumRaw) {
+          if (String(sumRaw || "").trim() === "") return { html: "", text: "" };
+          var sumN = parseNum(sumRaw);
+          if (sumN === null) {
+            return {
+              html: '<p class="sumline">Сумму не разобрали. Оставьте поле пустым или впишите число. На пропорцию это не влияет.</p>',
+              text: ""
+            };
           }
+          var money = fmt(Math.round(Math.abs(sumN) * 100) / 100, 2);
+          return {
+            html: '<p class="sumline">Сумма строки ' + money + ' ₽. Для справки, пропорцию не меняет.</p>',
+            text: " Сумма строки " + money + " ₽."
+          };
+        }
+
+        function recount() {
+          var docN = parseNum(doc.value);
+          var factN = parseNum(fact.value);
+          var money = sumNote(sum.value);
+          if (docN === null || factN === null) {
+            result.className = "result";
+            result.innerHTML = idle;
+            return;
+          }
+          if (!(docN > 0) || factN < 0) {
+            result.className = "result stop";
+            result.innerHTML = '<span class="big">Проверьте числа</span><p>По документу нужно число больше нуля. Факт не бывает меньше нуля.</p>';
+            return;
+          }
+          var unitName = kind === "kg" ? "кг" : "шт";
+          if (factN > docN + 1e-9) {
+            result.className = "result stop";
+            result.innerHTML = '<span class="big">Это излишек</span><p>По факту больше на ' + fmtQty(factN - docN) + " " + unitName + ". Лишнее в этой пропорции не считаем.</p>" + money.html;
+            return;
+          }
+          var short = docN - factN;
+          if (short <= 1e-9) {
+            result.className = "result";
+            result.innerHTML = '<span class="big">Разницы нет</span><p>Количество сошлось. Считать пропорцию недобора не из чего.</p>' + money.html;
+            return;
+          }
+
+          var ok = within(short, docN, limit);
+          var pct = pctText(short, docN);
+          var yours, allow, barNote, title, comment;
+          if (kind === "kg") {
+            var shortG = Math.round(short * 1000 * 10) / 10;
+            var docG = Math.round(docN * 1000 * 10) / 10;
+            var allowG = Math.round(docN * 50 * 10) / 10;
+            yours = fmtQty(shortG) + " г из " + fmtQty(docG) + " г";
+            allow = fmtQty(allowG) + " г из " + fmtQty(docG) + " г";
+            barNote = "Факт " + fmtQty(factN) + " кг. Граница веса: " + fmtQty(docN * 0.95) + " кг.";
+            title = ok ? "Вес в допуске" : "Вес больше допуска";
+            comment = (ok ? "Погрешность веса. " : "Недобор веса больше допуска. ") + "Не хватает " + yours + ", это " + pct + "%. Допуск " + allow + ".";
+          } else {
+            var allowPcs = maxPieces(docN);
+            yours = fmtQty(short) + " из " + fmtQty(docN);
+            allow = fmtQty(allowPcs) + " из " + fmtQty(docN);
+            barNote = "Факт " + fmtQty(factN) + " шт. Граница штук: от " + fmtQty(docN - allowPcs) + " шт.";
+            title = ok ? "Штуки в допуске" : "Штуки больше допуска";
+            comment = (ok ? "Погрешность пересчёта. " : "Недобор штук больше допуска. ") + "Не хватает " + yours + ", это " + pct + "%. Допуск " + allow + ".";
+          }
+
+          result.className = "result " + (ok ? "go" : "stop");
+          result.innerHTML =
+            '<span class="big">' + title + "</span>" +
+            '<div class="fracs">' +
+              '<div class="frac"><span>Эта строка</span><b>' + yours + "</b><span>" + pct + "%</span></div>" +
+              '<div class="frac"><span>Допуск</span><b>' + allow + "</b><span>" + limit + " из 100</span></div>" +
+            "</div>" +
+            barHtml(factN, docN, limit, !ok) +
+            '<p class="bar-note">' + barNote + "</p>" +
+            money.html +
+            '<p class="comment">' + comment + money.text + "</p>" +
+            '<button type="button" class="copy">Скопировать комментарий</button>';
+
+          result.querySelector(".copy").addEventListener("click", function () {
+            var btn = this;
+            var phrase = comment + money.text;
+            var done = function () { btn.textContent = "Скопировано"; };
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+              navigator.clipboard.writeText(phrase).then(done).catch(done);
+            } else {
+              done();
+            }
+          });
+        }
+
+        [doc, fact, sum].forEach(function (el) {
+          el.addEventListener("input", recount);
         });
+        form.querySelectorAll("[data-fill]").forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            var parts = btn.getAttribute("data-fill").split("|");
+            doc.value = parts[0];
+            fact.value = parts[1];
+            sum.value = parts[2] || "";
+            recount();
+          });
+        });
+        form.addEventListener("submit", function (e) { e.preventDefault(); });
+        return { doc: doc, fact: fact, sum: sum, recount: recount };
       }
 
-      btnKg.addEventListener("click", function () { setUnit("kg"); });
-      btnPcs.addEventListener("click", function () { setUnit("pcs"); });
-      [doc, fact, sum, metiz].forEach(function (el) {
-        el.addEventListener("input", recount);
-        el.addEventListener("change", recount);
+      var forms = {};
+      document.querySelectorAll("form.calc").forEach(function (form) {
+        forms[form.getAttribute("data-kind")] = mount(form);
       });
-      document.querySelectorAll("[data-demo]").forEach(function (btn) {
-        btn.addEventListener("click", function () { applyDemo(btn.getAttribute("data-demo")); });
-      });
-      document.getElementById("calc").addEventListener("submit", function (e) { e.preventDefault(); });
 
-      var demo = new URLSearchParams(location.search).get("demo");
-      if (demos[demo]) applyDemo(demo);
+      var params = new URLSearchParams(location.search);
+      function fill(kind, raw) {
+        if (!raw || !forms[kind]) return;
+        var parts = raw.split(",");
+        forms[kind].doc.value = parts[0] || "";
+        forms[kind].fact.value = parts[1] || "";
+        forms[kind].sum.value = parts[2] || "";
+        forms[kind].recount();
+      }
+      fill("kg", params.get("kg"));
+      fill("pcs", params.get("pcs"));
     })();
   </script>
 </body>
