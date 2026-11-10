@@ -3,33 +3,29 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Калькулятор погрешности по метизам — Академия УМ</title>
-  <meta name="description" content="Две отдельные пропорции для акта: 5 из 100 по весу и 12 из 100 по штукам. Сумма строки только для справки." />
+  <title>Когда списываем недостачу по метизам</title>
+  <meta name="description" content="1 кг и 0,976 кг подходит. 0,700 кг уже нет. 300 штук и 265 подходит. 150–180 уже нет. До 30 рублей списываем, если количество тоже прошло." />
   <meta name="theme-color" content="#4208A8" />
-  <meta name="robots" content="noindex,nofollow" />
   <link rel="icon" href="logo.png" />
   <style>
     :root {
       --violet: #4208A8;
       --gray: #CCCCCC;
       --white: #ffffff;
-      --black: #111111;
-      --muted: #5c5278;
-      --line: rgba(66, 8, 168, 0.16);
-      --soft: rgba(66, 8, 168, 0.08);
+      --ink: #111111;
+      --soft: #f6f6f6;
       --font: Arial, Helvetica, sans-serif;
       --head: "Arial Black", Arial, Helvetica, sans-serif;
     }
-    * { box-sizing: border-box; }
+    *, *::before, *::after { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
     body {
       margin: 0;
       font-family: var(--font);
-      color: var(--black);
+      color: var(--ink);
       background: var(--white);
-      line-height: 1.5;
+      line-height: 1.45;
     }
-    a { color: var(--violet); }
     .wrap { width: min(1040px, calc(100% - 32px)); margin: 0 auto; }
     header.top {
       display: flex;
@@ -38,11 +34,7 @@
       gap: 16px;
       padding: 18px 0 8px;
     }
-    header.top img {
-      width: 260px;
-      height: auto;
-      display: block;
-    }
+    .logo { width: 280px; min-width: 250px; height: auto; display: block; }
     .brand-side { text-align: right; }
     .brand-side strong {
       display: block;
@@ -51,7 +43,7 @@
       font-size: 1.15rem;
       letter-spacing: -0.03em;
     }
-    .brand-side span { color: var(--muted); font-size: 0.92rem; }
+    .brand-side span { font-size: 0.92rem; }
     .hero {
       margin: 12px 0 22px;
       padding: 28px 28px 26px;
@@ -68,225 +60,230 @@
       color: var(--gray);
     }
     h1 {
-      margin: 0 0 10px;
+      margin: 0 0 12px;
       font-family: var(--head);
-      font-size: clamp(2rem, 5vw, 3.1rem);
+      font-size: clamp(2rem, 5vw, 3rem);
       line-height: 1.02;
       letter-spacing: -0.03em;
-      font-weight: 800;
     }
-    .hero p { margin: 0; max-width: 68ch; color: rgba(255,255,255,0.92); font-size: 1.06rem; }
+    .hero p { margin: 0; max-width: 68ch; font-size: 1.08rem; }
     h2 {
-      margin: 28px 0 10px;
+      margin: 28px 0 8px;
       font-family: var(--head);
-      font-size: clamp(1.35rem, 2.4vw, 1.7rem);
+      font-size: clamp(1.4rem, 2.6vw, 1.8rem);
       color: var(--violet);
       letter-spacing: -0.03em;
-      font-weight: 800;
     }
-    .lead { margin: 0 0 14px; max-width: 72ch; }
-    .props {
+    .lead { margin: 0 0 14px; max-width: 70ch; }
+    .stories {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 12px;
     }
-    .calcs { display: grid; gap: 16px; }
-    .calc-name {
-      margin: 0 0 6px;
-      font-family: var(--head);
-      font-size: 1.35rem;
-      color: var(--violet);
-      letter-spacing: -0.03em;
-    }
-    .hint { margin: 0 0 12px; color: var(--muted); font-size: 0.95rem; }
-    .sumline {
-      margin: 10px 0 0;
-      font-size: 0.92rem;
-    }
-    .prop, .card, .calc, .story {
+    .story {
+      border: 1px solid var(--gray);
+      border-radius: 18px;
+      padding: 16px 18px 14px;
       background: var(--white);
-      border: 1px solid var(--line);
-      border-radius: 16px;
     }
-    .prop { padding: 18px 18px 16px; }
-    .prop .tag, .story .tag {
-      margin: 0 0 8px;
+    .story.yes {
+      background: var(--violet);
+      color: var(--white);
+      border-color: var(--violet);
+    }
+    .tag {
+      margin: 0 0 6px;
       font-size: 0.75rem;
       font-weight: 700;
-      letter-spacing: 0.06em;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
       color: var(--violet);
     }
-    .ratio {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin: 0 0 8px;
-      font-family: var(--head);
-      font-size: clamp(2.2rem, 4vw, 3rem);
-      line-height: 0.9;
-      letter-spacing: -0.04em;
-      color: var(--violet);
-    }
-    .ratio i {
-      width: 46px;
-      height: 3px;
-      background: var(--violet);
-      display: block;
-      transform: rotate(-18deg);
-    }
-    .prop p, .story p { margin: 0 0 8px; }
-    .prop p:last-child, .story p:last-child { margin: 0; }
-    .stories { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-    .story { padding: 18px; }
-    .story.yes { background: var(--violet); color: var(--white); border-color: var(--violet); }
     .story.yes .tag { color: var(--gray); }
-    .story h3, .prop h3 {
-      margin: 0 0 8px;
+    .story h3 {
+      margin: 0;
       font-family: var(--head);
+      font-size: 1.25rem;
+      letter-spacing: -0.03em;
+      line-height: 1.2;
+    }
+    .rows {
+      display: grid;
+      grid-template-columns: 9.2rem 1fr;
+      gap: 4px 10px;
+      margin: 12px 0 10px;
+    }
+    .rows dt { margin: 0; color: var(--violet); }
+    .story.yes .rows dt { color: var(--gray); }
+    .rows dd {
+      margin: 0;
+      font-weight: 700;
+    }
+    .story p { margin: 0; }
+    .money {
+      margin-top: 12px;
+      padding: 16px 18px;
+      border-radius: 18px;
+      background: var(--soft);
+      border: 1px solid var(--gray);
+    }
+    .money strong {
+      display: block;
+      margin: 0 0 6px;
+      font-family: var(--head);
+      color: var(--violet);
       font-size: 1.2rem;
       letter-spacing: -0.03em;
-      font-weight: 800;
     }
-    .story.yes h3 { color: var(--white); }
+    .money p { margin: 0; max-width: 75ch; }
+    .rules {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .rules article {
+      border: 1px solid var(--gray);
+      border-radius: 16px;
+      padding: 14px 16px;
+    }
+    .rules h3 {
+      margin: 0 0 6px;
+      color: var(--violet);
+      font-size: 1.05rem;
+    }
+    .rules p { margin: 0; }
     .calc {
       display: grid;
       grid-template-columns: 1.05fr 0.95fr;
-      gap: 0;
+      border: 1px solid var(--gray);
+      border-radius: 18px;
       overflow: hidden;
-      box-shadow: 0 12px 32px rgba(66, 8, 168, 0.08);
     }
-    .form, .result { padding: 20px; }
-    .result { background: var(--soft); border-left: 1px solid var(--line); }
+    .form, .result { padding: 18px; }
+    .result { background: var(--soft); border-left: 1px solid var(--gray); }
     .result.go { background: var(--violet); color: var(--white); }
-    .result.stop { background: #f7f7f7; color: var(--black); }
-    label { display: block; margin: 12px 0 6px; font-size: 0.92rem; font-weight: 700; }
-    .form label:first-of-type { margin-top: 0; }
+    label { display: block; margin: 14px 0 6px; font-weight: 700; }
+    .form label:first-of-type { margin-top: 12px; }
     input[type="text"] {
       width: 100%;
-      border: 1px solid var(--line);
+      border: 1px solid var(--gray);
       border-radius: 12px;
       padding: 12px 14px;
       font: inherit;
-      font-size: 1.15rem;
-      color: var(--black);
+      font-size: 1.12rem;
+      color: var(--ink);
       background: var(--white);
     }
-    input[type="text"]:focus { outline: 2px solid var(--violet); border-color: var(--violet); }
-    .seg { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-    .seg button, .chips button, .copy {
-      font: inherit;
-      cursor: pointer;
+    input:focus, button:focus-visible {
+      outline: 2px solid var(--violet);
+      outline-offset: 2px;
     }
+    .seg { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .seg button, .chips button, .copy { font: inherit; cursor: pointer; }
     .seg button {
-      border: 1px solid var(--line);
+      border: 1px solid var(--gray);
       background: var(--white);
       border-radius: 12px;
-      padding: 12px 10px;
+      padding: 12px 8px;
       font-weight: 700;
-      color: var(--violet);
+      color: var(--ink);
     }
-    .seg button.on { background: var(--violet); color: var(--white); border-color: var(--violet); }
+    .seg button[aria-pressed="true"] {
+      background: var(--violet);
+      color: var(--white);
+      border-color: var(--violet);
+    }
     .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    .checkline { display: flex; gap: 8px; align-items: flex-start; margin-top: 14px; font-weight: 400; }
-    .checkline input { width: auto; margin-top: 4px; }
-    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+    .hint {
+      margin: 12px 0 0;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid var(--gray);
+      background: var(--white);
+    }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
     .chips button, .copy {
-      border: 1px solid var(--line);
+      border: 1px solid var(--violet);
       background: var(--white);
       color: var(--violet);
       border-radius: 999px;
-      padding: 7px 12px;
+      padding: 8px 12px;
       font-weight: 700;
     }
-    .result.go .copy { color: var(--violet); }
     .result .big {
       display: block;
       margin: 0 0 8px;
       font-family: var(--head);
-      font-size: clamp(1.45rem, 2.5vw, 1.9rem);
-      line-height: 1.1;
+      font-size: clamp(1.45rem, 2.6vw, 1.9rem);
       letter-spacing: -0.03em;
+      line-height: 1.15;
     }
-    .fracs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0; }
-    .frac {
-      background: var(--white);
-      color: var(--black);
-      border-radius: 12px;
-      padding: 10px 12px;
-    }
-    .result.go .frac { background: rgba(255,255,255,0.14); color: var(--white); }
-    .frac b { display: block; font-size: 1.15rem; letter-spacing: -0.02em; }
-    .frac span { display: block; font-size: 0.82rem; color: var(--muted); }
-    .result.go .frac span { color: var(--gray); }
-    .bar-wrap { margin: 8px 0 4px; }
-    .bar {
-      position: relative;
-      height: 22px;
-      border-radius: 999px;
-      background: #e6e6e6;
-      overflow: hidden;
-    }
-    .result.go .bar { background: rgba(255,255,255,0.25); }
-    .bar-allow {
-      position: absolute;
-      top: 0; bottom: 0; right: 0;
-      background: rgba(66, 8, 168, 0.28);
-    }
-    .result.go .bar-allow { background: rgba(255,255,255,0.35); }
-    .bar-fact { position: absolute; top: 0; bottom: 0; left: 0; background: var(--violet); }
-    .bar-fact.past { background: var(--black); }
-    .result.go .bar-fact { background: var(--white); }
-    .bar-limit {
-      position: absolute;
-      top: 0; bottom: 0;
-      width: 3px;
-      background: var(--violet);
-    }
-    .result.go .bar-limit { background: var(--gray); }
-    .bar-note { margin: 6px 0 0; font-size: 0.88rem; }
-    .checks { list-style: none; margin: 10px 0 0; padding: 0; }
-    .checks li { margin: 0 0 4px; }
-    .comment {
-      margin: 12px 0 0;
-      padding: 10px 12px;
-      border-radius: 10px;
-      background: var(--white);
-      color: var(--black);
-      font-size: 0.95rem;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 8px 0 12px;
-    }
-    th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
-    th { color: var(--violet); font-size: 0.78rem; letter-spacing: 0.04em; text-transform: uppercase; }
-    td.num { font-weight: 700; white-space: nowrap; }
-    .note {
-      margin: 8px 0 0;
-      padding: 12px 14px;
-      background: var(--soft);
-      border-radius: 12px;
-    }
-    footer {
-      margin: 28px 0 20px;
-      color: var(--muted);
+    .result p { margin: 0 0 8px; }
+    .meter { margin: 8px 0 4px; }
+    .cap {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 4px;
       font-size: 0.92rem;
     }
+    .track {
+      height: 10px;
+      border-radius: 999px;
+      background: var(--gray);
+      overflow: hidden;
+    }
+    .result.go .track { background: rgba(255, 255, 255, 0.28); }
+    .track b {
+      display: block;
+      height: 100%;
+      width: 0;
+      background: var(--violet);
+      border-radius: inherit;
+    }
+    .result.go .track b { background: var(--white); }
+    .comment {
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: 12px;
+      background: var(--white);
+      color: var(--ink);
+    }
+    .result.go .comment {
+      background: rgba(255, 255, 255, 0.14);
+      color: var(--white);
+    }
+    .copy { margin-top: 10px; }
+    .result.go .copy { background: var(--white); }
+    .stops {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .stops article {
+      border: 1px solid var(--gray);
+      border-radius: 16px;
+      padding: 14px 16px;
+    }
+    .stops h3 { margin: 0 0 6px; color: var(--violet); font-size: 1.02rem; }
+    .stops p { margin: 0; }
+    footer { margin: 8px 0 28px; }
+    footer p { margin: 0; }
     @media (max-width: 800px) {
-      .props, .stories, .calc, .fracs, .row2 { grid-template-columns: 1fr; }
-      .result { border-left: 0; border-top: 1px solid var(--line); }
-      header.top { flex-direction: column; align-items: flex-start; }
-      header.top img { width: 250px; }
-      .brand-side { text-align: left; }
+      header.top, .stories, .rules, .calc, .row2, .stops { display: block; }
+      .brand-side { text-align: left; margin-top: 10px; }
+      .logo { width: 250px; min-width: 250px; }
+      .story, .rules article, .stops article, .money { margin-top: 12px; }
+      .result { border-left: 0; border-top: 1px solid var(--gray); }
+      .rows { grid-template-columns: 8.2rem 1fr; }
     }
   </style>
 </head>
 <body>
   <div class="wrap">
     <header class="top">
-      <img src="logo.png" alt="У Михалыча" width="260" height="33" />
+      <img class="logo" src="logo.png" alt="У Михалыча" width="280" height="36" />
       <div class="brand-side">
         <strong>Академия УМ</strong>
         <span>Приёмка метизов с РЦ</span>
@@ -296,317 +293,373 @@
     <section class="hero">
       <p class="kicker">Акт о расхождении</p>
       <h1>Делаем мир крепче</h1>
-      <p>Вес и штуки считаем разными пропорциями. Это не одно списание. Сумму из колонки «Сумма» можно вписать рядом: калькулятор её показывает и на пропорцию не смотрит.</p>
+      <p>Мелкая недостача по гвоздям, саморезам и болтам. Сначала смотрите, сколько не доехало. Если это чуть-чуть и сумма строки до 30&nbsp;рублей, магазин списывает сам. Если не доехало много, это уже недостача, даже за маленькие деньги.</p>
     </section>
 
-    <h2>Две пропорции</h2>
-    <p class="lead">Килограммы сверяем только с весом. Штуки сверяем только со штуками. Строка в килограммах во второй расчёт не попадает, и наоборот. Надпись «шт/кг» в названии единицу не меняет: смотрите, как количество стоит в акте.</p>
-    <div class="props">
-      <article class="prop">
-        <p class="tag">Только килограммы</p>
-        <p class="ratio" aria-label="5 из 100"><span>5</span><i></i><span>100</span></p>
-        <h3>50 г на 1 кг</h3>
-        <p>На каждые 1&nbsp;000&nbsp;г можно не добрать 50&nbsp;г. На 0,5&nbsp;кг это 25&nbsp;г. На 2&nbsp;кг это 100&nbsp;г. Выписали 1&nbsp;кг, приехало 0,976: 24&nbsp;г из 1&nbsp;000. Приехало 0,700: 300&nbsp;г из 1&nbsp;000, это уже не весы.</p>
-      </article>
-      <article class="prop">
-        <p class="tag">Только штуки</p>
-        <p class="ratio" aria-label="12 из 100"><span>12</span><i></i><span>100</span></p>
-        <h3>12 штук на 100</h3>
-        <p>На 300 штук можно не добрать 36. На 28 штук можно не добрать 3. Приехало 265 из 300: не хватает 35. Приехало 150–180: не хватает почти половина пачки.</p>
-      </article>
-    </div>
-
-    <h2>Два расчёта</h2>
-    <p class="lead">Сумма строки необязательна. Если вписать, она останется под ответом для справки.</p>
-    <div class="calcs">
-      <form class="calc" data-kind="kg">
-        <div class="form">
-          <h3 class="calc-name">Вес</h3>
-          <p class="hint">Количество в акте килограммами: 1 и 0,99, 0,5 и 0,43.</p>
-          <div class="row2">
-            <label>По документу, кг
-              <input data-field="doc" type="text" inputmode="decimal" placeholder="1" autocomplete="off" />
-            </label>
-            <label>Факт, кг
-              <input data-field="fact" type="text" inputmode="decimal" placeholder="0,976" autocomplete="off" />
-            </label>
-          </div>
-          <label>Сумма строки, для справки
-            <input data-field="sum" type="text" inputmode="decimal" placeholder="можно не заполнять" autocomplete="off" />
-          </label>
-          <div class="chips" aria-label="Примеры веса">
-            <button type="button" data-fill="1|0,976|4,20">1 кг → 0,976</button>
-            <button type="button" data-fill="1|0,700|18">1 кг → 0,700</button>
-            <button type="button" data-fill="0,5|0,43|8,42">0,5 кг → 0,43</button>
-          </div>
-        </div>
-        <div class="result" aria-live="polite">
-          <span class="big">Ждёт килограммы</span>
-          <p>Впишите вес по документу и по факту. Допуск здесь 5 из 100.</p>
-        </div>
-      </form>
-
-      <form class="calc" data-kind="pcs">
-        <div class="form">
-          <h3 class="calc-name">Штуки</h3>
-          <p class="hint">Количество в акте штуками: 312 и 307, 28 и 21.</p>
-          <div class="row2">
-            <label>По документу, шт
-              <input data-field="doc" type="text" inputmode="decimal" placeholder="300" autocomplete="off" />
-            </label>
-            <label>Факт, шт
-              <input data-field="fact" type="text" inputmode="decimal" placeholder="265" autocomplete="off" />
-            </label>
-          </div>
-          <label>Сумма строки, для справки
-            <input data-field="sum" type="text" inputmode="decimal" placeholder="можно не заполнять" autocomplete="off" />
-          </label>
-          <div class="chips" aria-label="Примеры штук">
-            <button type="button" data-fill="300|265|12">300 → 265</button>
-            <button type="button" data-fill="300|165|20">300 → 165</button>
-            <button type="button" data-fill="28|21|29,12">28 → 21</button>
-          </div>
-        </div>
-        <div class="result" aria-live="polite">
-          <span class="big">Ждёт штуки</span>
-          <p>Впишите штуки по документу и по факту. Допуск здесь 12 из 100.</p>
-        </div>
-      </form>
-    </div>
-
-    <h2>Как эти пропорции выглядят на примерах</h2>
+    <h2>Найдите свою историю</h2>
+    <p class="lead">Четыре знакомых случая. Свою строку сравнивайте с ними, а не «на глаз».</p>
     <div class="stories">
       <article class="story yes">
-        <p class="tag">Вес в допуске</p>
-        <h3>1 кг и приехало 0,976 кг</h3>
-        <p>Не хватает 24&nbsp;г из 1&nbsp;000&nbsp;г. Допуск 50 из 1&nbsp;000. Это пропорция веса, сумма строки здесь ни при чём.</p>
+        <p class="tag">Подходит</p>
+        <h3>1 кг гвоздей, приехало 0,976 кг</h3>
+        <dl class="rows">
+          <dt>Выписали</dt><dd>1 кг</dd>
+          <dt>Приехало</dt><dd>0,976 кг</dd>
+          <dt>Не хватает</dt><dd>24 грамма</dd>
+          <dt>Можно до</dt><dd>50 грамм</dd>
+        </dl>
+        <p>24 грамма из 50. Это погрешность. Если сумма строки до 30&nbsp;₽, списываем.</p>
       </article>
       <article class="story">
-        <p class="tag">Вес больше допуска</p>
-        <h3>1 кг и приехало 0,700 кг</h3>
-        <p>Не хватает 300&nbsp;г из 1&nbsp;000&nbsp;г. Допуск те же 50 из 1&nbsp;000. Штучный расчёт к этим килограммам не применяется.</p>
+        <p class="tag">Уже нет</p>
+        <h3>1 кг гвоздей, приехало 0,700 кг</h3>
+        <dl class="rows">
+          <dt>Выписали</dt><dd>1 кг</dd>
+          <dt>Приехало</dt><dd>0,700 кг</dd>
+          <dt>Не хватает</dt><dd>300 грамм</dd>
+          <dt>Можно до</dt><dd>50 грамм</dd>
+        </dl>
+        <p>300 грамм вместо 50. Это треть килограмма. Так не списываем, даже если строка стоит 15 или 25&nbsp;рублей.</p>
       </article>
       <article class="story yes">
-        <p class="tag">Штуки в допуске</p>
-        <h3>300 штук и приехало 265</h3>
-        <p>Не хватает 35 из 300. Допуск 36 из 300. Это отдельная пропорция, не продолжение веса.</p>
+        <p class="tag">Подходит</p>
+        <h3>300 штук, приехало 265</h3>
+        <dl class="rows">
+          <dt>Выписали</dt><dd>300 шт</dd>
+          <dt>Приехало</dt><dd>265 шт</dd>
+          <dt>Не хватает</dt><dd>35 штук</dd>
+          <dt>Можно до</dt><dd>36 штук</dd>
+        </dl>
+        <p>35 штук из 36. Это ещё погрешность. Если сумма строки до 30&nbsp;₽, списываем.</p>
       </article>
       <article class="story">
-        <p class="tag">Штуки больше допуска</p>
-        <h3>300 штук и приехало 150–180</h3>
-        <p>Не хватает 120–150 из 300. Допуск те же 36 из 300. Это уже не пересчёт пачки.</p>
+        <p class="tag">Уже нет</p>
+        <h3>300 штук, приехало 150–180</h3>
+        <dl class="rows">
+          <dt>Выписали</dt><dd>300 шт</dd>
+          <dt>Приехало</dt><dd>150–180 шт</dd>
+          <dt>Не хватает</dt><dd>120–150 штук</dd>
+          <dt>Можно до</dt><dd>36 штук</dd>
+        </dl>
+        <p>Почти половина пачки. Это уже не погрешность. Сумма до 30&nbsp;рублей здесь ничего не меняет.</p>
       </article>
     </div>
 
-    <h2>Сколько можно не добрать</h2>
-    <table>
-      <thead>
-        <tr>
-          <th>Выписали</th>
-          <th>Пропорция</th>
-          <th>Факт ещё можно</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr><td>1 кг</td><td class="num">50 г из 1&nbsp;000 г</td><td>от 0,950 кг</td></tr>
-        <tr><td>0,5 кг</td><td class="num">25 г из 500 г</td><td>от 0,475 кг</td></tr>
-        <tr><td>2 кг</td><td class="num">100 г из 2&nbsp;000 г</td><td>от 1,900 кг</td></tr>
-        <tr><td>100 шт</td><td class="num">12 из 100</td><td>от 88 шт</td></tr>
-        <tr><td>300 шт</td><td class="num">36 из 300</td><td>от 264 шт</td></tr>
-        <tr><td>28 шт</td><td class="num">3 из 28</td><td>от 25 шт</td></tr>
-      </tbody>
-    </table>
-    <p class="note">Ровно 5 из 100 по весу и ровно 12 из 100 по штукам ещё входят в свою пропорцию. Сумма строки в эту таблицу не входит: её смотрят отдельно, калькулятор её не решает.</p>
+    <div class="money">
+      <strong>До 30&nbsp;₽ списываем, если количество подошло</strong>
+      <p>30&nbsp;рублей ещё можно. 30&nbsp;рублей и одна копейка уже нет. Сумма одна на строку: десять килограммов не дают потолок 300&nbsp;₽. Маленькая сумма большую дыру не закрывает. Сначала вес или штуки, потом деньги.</p>
+    </div>
 
-    <h2>Что написать в комментарии</h2>
-    <p class="lead">Факт в ордере оставляем как пересчитали. Калькулятор даёт фразу только про свою пропорцию. Если сумму вписали, она добавляется второй строкой, для справки.</p>
-    <footer>У Михалыча · Делаем мир крепче · приёмка метизов с РЦ · с 30 октября 2026</footer>
+    <div class="rules">
+      <article>
+        <h3>Вес</h3>
+        <p>50&nbsp;грамм на каждый выписанный килограмм. На 1&nbsp;кг можно не добрать до 50&nbsp;г, приехать может от 0,950&nbsp;кг. На 0,5&nbsp;кг это 25&nbsp;г. На 2&nbsp;кг это 100&nbsp;г.</p>
+      </article>
+      <article>
+        <h3>Штуки</h3>
+        <p>12&nbsp;штук на каждые 100. На 300 можно не добрать до 36, приехать может от 264. На 100 это 12 штук. Если по счёту вышло 3,36, целиком можно 3.</p>
+      </article>
+      <article>
+        <h3>Деньги</h3>
+        <p>Смотрим колонку «Сумма» этой строки, без минуса. Строки между собой не складываем. Списываем, только когда вес или штуки тоже прошли.</p>
+      </article>
+    </div>
+
+    <h2>Посчитайте свою строку</h2>
+    <p class="lead">Подставьте количество из акта и сумму строки. Факт пишите как пересчитали. Кнопки ниже открывают те же четыре истории.</p>
+    <form class="calc" id="calc">
+      <div class="form">
+        <div class="seg" role="radiogroup" aria-label="В чём строка в акте">
+          <button type="button" id="unit-kg" data-unit="kg" aria-pressed="true">Килограммы</button>
+          <button type="button" id="unit-pcs" data-unit="pcs" aria-pressed="false">Штуки</button>
+        </div>
+        <div class="row2">
+          <div>
+            <label for="doc">Выписали</label>
+            <input id="doc" type="text" inputmode="decimal" placeholder="1" autocomplete="off" />
+          </div>
+          <div>
+            <label for="fact">Приехало</label>
+            <input id="fact" type="text" inputmode="decimal" placeholder="0,976" autocomplete="off" />
+          </div>
+        </div>
+        <label for="sum">Сумма строки, ₽</label>
+        <input id="sum" type="text" inputmode="decimal" placeholder="до 30" autocomplete="off" />
+        <p class="hint" id="hint">Впишите, сколько выписали. Здесь появится граница именно для этого количества.</p>
+        <div class="chips" aria-label="Примеры">
+          <button type="button" data-ex="kg|1|0,976|4,20">1 кг → 0,976</button>
+          <button type="button" data-ex="kg|1|0,700|18">1 кг → 0,700</button>
+          <button type="button" data-ex="pcs|300|265|12">300 шт → 265</button>
+          <button type="button" data-ex="pcs|300|165|20">300 шт → 165</button>
+          <button type="button" data-ex="kg|1|0,976|45">0,976 кг, но 45 ₽</button>
+        </div>
+      </div>
+      <div class="result" id="result" aria-live="polite">
+        <p class="big">Здесь будет решение</p>
+        <p>Калькулятор сравнит приехавшее с границей и сумму с 30&nbsp;₽.</p>
+      </div>
+    </form>
+
+    <h2>Так не списываем</h2>
+    <div class="stops">
+      <article>
+        <h3>Не метизы</h3>
+        <p>Клей, герметик, щётка, инструмент. Даже одна штука и даже сумма до 30&nbsp;₽. Это обычная недостача.</p>
+      </article>
+      <article>
+        <h3>Приехало больше</h3>
+        <p>Лишнее погрешностью не называем. В акте оставляем факт, как насчитали.</p>
+      </article>
+      <article>
+        <h3>Нашли не в день машины</h3>
+        <p>Правило для акта в день приёмки. Недостачу с полки потом так не закрываем.</p>
+      </article>
+      <article>
+        <h3>Соседние строки</h3>
+        <p>Каждая строка сама по себе. Пять годных списываем. Одна с большой дырой остаётся недостачей.</p>
+      </article>
+    </div>
+    <footer>
+      <p>У Михалыча · Делаем мир крепче</p>
+    </footer>
   </div>
   <script>
     (function () {
-      function parseNum(value) {
-        var clean = String(value || "").replace(/\s/g, "").replace(",", ".");
-        if (clean === "" || clean === "-" || clean === "+") return null;
+      var docEl = document.getElementById("doc");
+      var factEl = document.getElementById("fact");
+      var sumEl = document.getElementById("sum");
+      var hint = document.getElementById("hint");
+      var result = document.getElementById("result");
+      var unit = "kg";
+
+      function parseField(value) {
+        var raw = String(value || "").trim();
+        if (raw === "") return { empty: true };
+        var clean = raw.replace(/\s/g, "").replace(",", ".");
+        if (!/^[+-]?(?:\d+|\d+\.\d+|\.\d+)$/.test(clean)) return { bad: true };
         var n = Number(clean);
-        return Number.isFinite(n) ? n : null;
+        return Number.isFinite(n) ? { n: n } : { bad: true };
       }
 
-      function fmt(n, digits) {
-        return n.toLocaleString("ru-RU", {
-          minimumFractionDigits: digits,
-          maximumFractionDigits: digits
-        });
+      function ru(n, digits) {
+        var opt = { maximumFractionDigits: digits };
+        if (digits > 0) opt.minimumFractionDigits = digits;
+        return n.toLocaleString("ru-RU", opt);
       }
 
-      function fmtQty(n) {
+      function word(n, one, few, many) {
+        var abs = Math.abs(Math.round(n));
+        var n10 = abs % 10;
+        var n100 = abs % 100;
+        if (n10 === 1 && n100 !== 11) return one;
+        if (n10 >= 2 && n10 <= 4 && (n100 < 12 || n100 > 14)) return few;
+        return many;
+      }
+
+      function fmtKg(n) {
         var rounded = Math.round(n * 1000) / 1000;
-        return rounded.toLocaleString("ru-RU", { maximumFractionDigits: 3 });
+        if (Math.abs(rounded - Math.round(rounded)) < 1e-9) return ru(Math.round(rounded), 0);
+        return ru(rounded, 3);
       }
 
-      function pctText(short, docN) {
-        var pct = (short / docN) * 100;
-        var rounded = Math.round(pct * 10) / 10;
-        var digits = Math.abs(rounded - Math.round(rounded)) < 0.001 ? 0 : 1;
-        return fmt(rounded, digits);
+      function fmtMass(kg) {
+        var grams = Math.round(Math.abs(kg) * 1000);
+        if (grams >= 1000) return fmtKg(Math.abs(kg)) + " кг";
+        return ru(grams, 0) + " " + word(grams, "грамм", "грамма", "грамм");
       }
 
-      function within(short, docN, limit) {
-        return short * 100 <= docN * limit + 1e-6;
+      function fmtPcs(n) {
+        var rounded = Math.abs(n - Math.round(n)) < 1e-6 ? Math.round(n) : Math.round(n * 10) / 10;
+        return ru(rounded, Math.abs(rounded - Math.round(rounded)) < 1e-6 ? 0 : 1) + " " +
+          word(rounded, "штука", "штуки", "штук");
       }
 
-      function maxPieces(docN) {
-        var exact = docN * 0.12;
-        if (Math.abs(docN - Math.round(docN)) > 1e-6) return exact;
-        if (Math.abs(exact - Math.round(exact)) < 1e-6) return Math.round(exact);
-        return Math.floor(exact + 1e-9);
+      function fmtMoney(n) {
+        return ru(n, 2) + " \u20bd";
       }
 
-      function barHtml(factN, docN, limitPct, over) {
-        var factW = Math.max(0, Math.min(100, (factN / docN) * 100));
-        var limitLeft = 100 - limitPct;
-        return (
-          '<div class="bar-wrap">' +
-            '<div class="bar" aria-hidden="true">' +
-              '<div class="bar-allow" style="width:' + limitPct + '%"></div>' +
-              '<div class="bar-fact' + (over ? " past" : "") + '" style="width:' + factW + '%"></div>' +
-              '<div class="bar-limit" style="left:calc(' + limitLeft + '% - 1px)"></div>' +
-            "</div>" +
-          "</div>"
-        );
+      function allowancePieces(doc) {
+        return Math.floor((doc * 12 + 1e-6) / 100);
       }
 
-      function mount(form) {
-        var kind = form.getAttribute("data-kind");
-        var limit = kind === "kg" ? 5 : 12;
-        var doc = form.querySelector("[data-field=doc]");
-        var fact = form.querySelector("[data-field=fact]");
-        var sum = form.querySelector("[data-field=sum]");
-        var result = form.querySelector(".result");
-        var idle = kind === "kg"
-          ? '<span class="big">Ждёт килограммы</span><p>Впишите вес по документу и по факту. Допуск здесь 5 из 100.</p>'
-          : '<span class="big">Ждёт штуки</span><p>Впишите штуки по документу и по факту. Допуск здесь 12 из 100.</p>';
-
-        function sumNote(sumRaw) {
-          if (String(sumRaw || "").trim() === "") return { html: "", text: "" };
-          var sumN = parseNum(sumRaw);
-          if (sumN === null) {
-            return {
-              html: '<p class="sumline">Сумму не разобрали. Оставьте поле пустым или впишите число. На пропорцию это не влияет.</p>',
-              text: ""
-            };
-          }
-          var money = fmt(Math.round(Math.abs(sumN) * 100) / 100, 2);
-          return {
-            html: '<p class="sumline">Сумма строки ' + money + ' ₽. Для справки, пропорцию не меняет.</p>',
-            text: " Сумма строки " + money + " ₽."
-          };
+      function boundary(doc) {
+        if (!(doc > 0)) return "";
+        if (unit === "kg") {
+          var allow = doc * 0.05;
+          return "Выписали " + fmtKg(doc) + " кг. Приехать может от " + fmtKg(doc - allow) +
+            " кг. Не добрать можно до " + fmtMass(allow) + ". Сумма строки при этом до 30 \u20bd.";
         }
+        var pcs = allowancePieces(doc);
+        var exact = doc * 12 / 100;
+        var line = "Выписали " + fmtPcs(doc) + ". Приехать может от " + fmtPcs(doc - pcs) +
+          ". Не добрать можно до " + fmtPcs(pcs) + ".";
+        if (pcs === 0) {
+          return "На " + fmtPcs(doc) + " 12 из 100 меньше одной штуки. Целую штуку так не списываем.";
+        }
+        if (Math.abs(exact - pcs) > 0.05) {
+          line += " По счёту это " + ru(Math.round(exact * 100) / 100, 2).replace(",00", "") +
+            ", целиком берём " + ru(pcs, 0) + ".";
+        }
+        return line + " Сумма строки при этом до 30 \u20bd.";
+      }
 
-        function recount() {
-          var docN = parseNum(doc.value);
-          var factN = parseNum(fact.value);
-          var money = sumNote(sum.value);
-          if (docN === null || factN === null) {
-            result.className = "result";
-            result.innerHTML = idle;
-            return;
-          }
-          if (!(docN > 0) || factN < 0) {
-            result.className = "result stop";
-            result.innerHTML = '<span class="big">Проверьте числа</span><p>По документу нужно число больше нуля. Факт не бывает меньше нуля.</p>';
-            return;
-          }
-          var unitName = kind === "kg" ? "кг" : "шт";
-          if (factN > docN + 1e-9) {
-            result.className = "result stop";
-            result.innerHTML = '<span class="big">Это излишек</span><p>По факту больше на ' + fmtQty(factN - docN) + " " + unitName + ". Лишнее в этой пропорции не считаем.</p>" + money.html;
-            return;
-          }
-          var short = docN - factN;
-          if (short <= 1e-9) {
-            result.className = "result";
-            result.innerHTML = '<span class="big">Разницы нет</span><p>Количество сошлось. Считать пропорцию недобора не из чего.</p>' + money.html;
-            return;
-          }
+      function meter(label, ratio) {
+        var width = Math.max(0, Math.min(100, ratio * 100));
+        return '<div class="meter"><div class="cap"><span>' + label + '</span></div>' +
+          '<div class="track"><b style="width:' + width.toFixed(1) + '%"></b></div></div>';
+      }
 
-          var ok = within(short, docN, limit);
-          var pct = pctText(short, docN);
-          var yours, allow, barNote, title, comment;
-          if (kind === "kg") {
-            var shortG = Math.round(short * 1000 * 10) / 10;
-            var docG = Math.round(docN * 1000 * 10) / 10;
-            var allowG = Math.round(docN * 50 * 10) / 10;
-            yours = fmtQty(shortG) + " г из " + fmtQty(docG) + " г";
-            allow = fmtQty(allowG) + " г из " + fmtQty(docG) + " г";
-            barNote = "Факт " + fmtQty(factN) + " кг. Граница веса: " + fmtQty(docN * 0.95) + " кг.";
-            title = ok ? "Вес в допуске" : "Вес больше допуска";
-            comment = (ok ? "Погрешность веса. " : "Недобор веса больше допуска. ") + "Не хватает " + yours + ", это " + pct + "%. Допуск " + allow + ".";
+      function escapeHtml(text) {
+        return String(text)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;");
+      }
+
+      function paint(state, title, text, comment, bars) {
+        result.className = "result" + (state ? " " + state : "");
+        var html = '<p class="big">' + escapeHtml(title) + "</p><p>" + escapeHtml(text) + "</p>";
+        if (bars) html += bars;
+        if (comment) {
+          html += '<div class="comment">' + escapeHtml(comment) + "</div>";
+          html += '<button type="button" class="copy">Скопировать комментарий в акт</button>';
+        }
+        result.innerHTML = html;
+        var btn = result.querySelector(".copy");
+        if (!btn) return;
+        btn.addEventListener("click", function () {
+          var done = function () { btn.textContent = "Скопировано"; };
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(comment).then(done, function () { fallbackCopy(comment, btn); });
           } else {
-            var allowPcs = maxPieces(docN);
-            yours = fmtQty(short) + " из " + fmtQty(docN);
-            allow = fmtQty(allowPcs) + " из " + fmtQty(docN);
-            barNote = "Факт " + fmtQty(factN) + " шт. Граница штук: от " + fmtQty(docN - allowPcs) + " шт.";
-            title = ok ? "Штуки в допуске" : "Штуки больше допуска";
-            comment = (ok ? "Погрешность пересчёта. " : "Недобор штук больше допуска. ") + "Не хватает " + yours + ", это " + pct + "%. Допуск " + allow + ".";
+            fallbackCopy(comment, btn);
           }
+        });
+      }
 
-          result.className = "result " + (ok ? "go" : "stop");
-          result.innerHTML =
-            '<span class="big">' + title + "</span>" +
-            '<div class="fracs">' +
-              '<div class="frac"><span>Эта строка</span><b>' + yours + "</b><span>" + pct + "%</span></div>" +
-              '<div class="frac"><span>Допуск</span><b>' + allow + "</b><span>" + limit + " из 100</span></div>" +
-            "</div>" +
-            barHtml(factN, docN, limit, !ok) +
-            '<p class="bar-note">' + barNote + "</p>" +
-            money.html +
-            '<p class="comment">' + comment + money.text + "</p>" +
-            '<button type="button" class="copy">Скопировать комментарий</button>';
+      function fallbackCopy(text, btn) {
+        var area = document.createElement("textarea");
+        area.value = text;
+        document.body.appendChild(area);
+        area.select();
+        try {
+          document.execCommand("copy");
+          btn.textContent = "Скопировано";
+        } catch (err) {
+          btn.textContent = "Выделите текст комментария";
+        }
+        document.body.removeChild(area);
+      }
 
-          result.querySelector(".copy").addEventListener("click", function () {
-            var btn = this;
-            var phrase = comment + money.text;
-            var done = function () { btn.textContent = "Скопировано"; };
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-              navigator.clipboard.writeText(phrase).then(done).catch(done);
-            } else {
-              done();
-            }
-          });
+      function recount() {
+        var docN = parseField(docEl.value);
+        hint.textContent = docN.n > 0
+          ? boundary(docN.n)
+          : "Впишите, сколько выписали. Здесь появится граница именно для этого количества.";
+
+        var factN = parseField(factEl.value);
+        var sumN = parseField(sumEl.value);
+        if (docN.bad || factN.bad || sumN.bad) {
+          paint("", "Проверьте числа", "Нужны обычные числа: сколько выписали, сколько приехало и сумма строки.");
+          return;
+        }
+        if (docN.empty || factN.empty || sumN.empty) {
+          paint("", "Здесь будет решение", "Нужны три числа: выписали, приехало и сумма строки.");
+          return;
         }
 
-        [doc, fact, sum].forEach(function (el) {
-          el.addEventListener("input", recount);
-        });
-        form.querySelectorAll("[data-fill]").forEach(function (btn) {
-          btn.addEventListener("click", function () {
-            var parts = btn.getAttribute("data-fill").split("|");
-            doc.value = parts[0];
-            fact.value = parts[1];
-            sum.value = parts[2] || "";
-            recount();
-          });
-        });
-        form.addEventListener("submit", function (e) { e.preventDefault(); });
-        return { doc: doc, fact: fact, sum: sum, recount: recount };
+        var doc = docN.n;
+        var fact = factN.n;
+        var sum = Math.round(Math.abs(sumN.n) * 100) / 100;
+        if (!(doc > 0) || fact < 0) {
+          paint("", "Проверьте числа", "Выписали больше нуля. Приехать меньше нуля не может.");
+          return;
+        }
+        if (fact > doc + 1e-9) {
+          var extra = unit === "kg" ? fmtMass(fact - doc) : fmtPcs(fact - doc);
+          paint("", "Это излишек", "Приехало больше на " + extra + ". Лишнее как погрешность не списываем. В акте оставляем факт.",
+            "Излишек " + extra + ". Как погрешность не списываем.");
+          return;
+        }
+
+        var short = doc - fact;
+        if (short <= 1e-9) {
+          paint("", "Списывать нечего", "Количество сошлось. Если в акте есть сумма, проверьте, ту ли строку смотрите.");
+          return;
+        }
+
+        var isKg = unit === "kg";
+        var allowance = isKg ? doc * 0.05 : allowancePieces(doc);
+        var qtyOk = short <= allowance + 1e-9;
+        var moneyOk = sum <= 30;
+        var shortText = isKg ? fmtMass(short) : fmtPcs(short);
+        var allowText = isKg ? fmtMass(allowance) : fmtPcs(allowance);
+        var wrote = isKg ? fmtKg(doc) + " кг" : fmtPcs(doc);
+        var came = isKg ? fmtKg(fact) + " кг" : fmtPcs(fact);
+        var floor = isKg ? fmtKg(doc - allowance) + " кг" : fmtPcs(doc - allowance);
+        var moneyText = fmtMoney(sum);
+        var ratio = allowance > 0 ? short / allowance : 2;
+        var bars = "";
+        if (allowance > 0) {
+          bars += meter("Не хватает " + shortText + " из " + allowText, ratio);
+        }
+        bars += meter("Сумма " + moneyText + " из 30 \u20bd", sum / 30);
+
+        var qtySentence = allowance === 0
+          ? "На это количество целую штуку не списываем. Не хватает " + shortText + "."
+          : "Выписали " + wrote + ". Приехать может от " + floor + ", у вас " + came +
+            ". Не хватает " + shortText + ", а можно до " + allowText + ".";
+
+        if (qtyOk && moneyOk) {
+          var okText = qtySentence + " Сумма " + moneyText + ", это до 30 \u20bd. Списываем.";
+          paint("go", "Подходит. Списываем.", okText, 
+            "Погрешность приёмки. Выписали " + wrote + ", приехало " + came + ". Не хватает " +
+            shortText + ", можно до " + allowText + ". Сумма " + moneyText + ". Магазин списывает строку сам.",
+            bars);
+          return;
+        }
+
+        var why;
+        var title;
+        if (!qtyOk && moneyOk) {
+          title = "Уже не подходит";
+          why = " Сумма " + moneyText + " не больше 30 \u20bd, но не доехало слишком много. Так не списываем.";
+        } else if (qtyOk && !moneyOk) {
+          title = "Количество подходит, сумма нет";
+          why = " Количество внутри границы. Сумма " + moneyText + " больше 30 \u20bd, поэтому не списываем.";
+        } else {
+          title = "Уже не подходит";
+          why = " И не доехало слишком много, и сумма " + moneyText + " больше 30 \u20bd.";
+        }
+        paint("", title, qtySentence + why,
+          "Недостача, не погрешность. Выписали " + wrote + ", приехало " + came + ". Не хватает " +
+          shortText + ", можно до " + allowText + ". Сумма " + moneyText + ".",
+          bars);
       }
 
-      var forms = {};
-      document.querySelectorAll("form.calc").forEach(function (form) {
-        forms[form.getAttribute("data-kind")] = mount(form);
+      function setUnit(next, button) {
+        unit = next;
+        document.getElementById("unit-kg").setAttribute("aria-pressed", next === "kg" ? "true" : "false");
+        document.getElementById("unit-pcs").setAttribute("aria-pressed", next === "pcs" ? "true" : "false");
+        docEl.placeholder = next === "kg" ? "1" : "300";
+        factEl.placeholder = next === "kg" ? "0,976" : "265";
+        if (button) button.blur();
+        recount();
+      }
+
+      document.getElementById("unit-kg").addEventListener("click", function () { setUnit("kg", this); });
+      document.getElementById("unit-pcs").addEventListener("click", function () { setUnit("pcs", this); });
+      [docEl, factEl, sumEl].forEach(function (el) { el.addEventListener("input", recount); });
+      document.getElementById("calc").addEventListener("submit", function (event) { event.preventDefault(); });
+      document.querySelectorAll(".chips button").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          var parts = btn.getAttribute("data-ex").split("|");
+          docEl.value = parts[1];
+          factEl.value = parts[2];
+          sumEl.value = parts[3];
+          setUnit(parts[0]);
+        });
       });
-
-      var params = new URLSearchParams(location.search);
-      function fill(kind, raw) {
-        if (!raw || !forms[kind]) return;
-        var parts = raw.split(",");
-        forms[kind].doc.value = parts[0] || "";
-        forms[kind].fact.value = parts[1] || "";
-        forms[kind].sum.value = parts[2] || "";
-        forms[kind].recount();
-      }
-      fill("kg", params.get("kg"));
-      fill("pcs", params.get("pcs"));
     })();
   </script>
 </body>
